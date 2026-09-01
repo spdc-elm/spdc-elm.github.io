@@ -7,7 +7,7 @@ const aboutEntries = await getCollection('about')
 const about = aboutEntries[0]
 const { Content } = about ? await render(about) : { Content: null }
 ---
-<Layout title={`${profile.fullName || 'your-name'} · home`}>
+<Layout title={`${profile.fullName || 'spdc-elm'} · home`}>
   <section class="home-panel">
     <p class="command"><span class="prompt">spdc-elm@ZJU</span> <span class="muted">% cat about.md</span></p>
     <div class="about-content markdown">

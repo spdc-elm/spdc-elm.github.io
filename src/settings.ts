@@ -1,5 +1,5 @@
 export const profile = {
-  fullName: 'your-name',
+  fullName: 'spdc-elm',
   title: '',
   institute: '',
   author_name: '',
@@ -31,7 +31,7 @@ export const template = {
 }
 
 export const seo = {
-  default_title: 'your-name · home',
+  default_title: 'spdc-elm · home',
   default_description: 'A personal website.',
   default_image: '/favicon.svg',
 }

@@ -5,7 +5,7 @@ import { template } from '../settings'
 
 const posts = (await getCollection('blogs')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 ---
-<Layout title="blogs · your-name">
+<Layout title="blogs · spdc-elm">
   <section class="blog-page">
     <h1>Blogs</h1>
     {posts.length === 0 ? (
