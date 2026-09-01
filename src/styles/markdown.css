@@ -1,0 +1,27 @@
+.markdown {
+  color: #26352b;
+  font-size: 15px;
+  line-height: 1.85;
+}
+.markdown h1, .markdown h2, .markdown h3, .markdown h4, .markdown h5, .markdown h6 {
+  color: #087eb5;
+  line-height: 1.4;
+}
+.markdown h2 { margin: 38px 0 14px; font-size: 1.65rem; }
+.markdown h3 { margin: 28px 0 12px; font-size: 1.3rem; }
+.markdown p { margin: 0 0 18px; }
+.markdown ul { margin: 0 0 18px; padding-left: 1.5em; list-style: disc; }
+.markdown ol { margin: 0 0 18px; padding-left: 1.5em; list-style: decimal; }
+.markdown li { margin-bottom: 8px; }
+.markdown a { color: #087eb5; }
+.markdown img { max-width: 100%; height: auto; }
+.markdown figure { margin: 28px 0; text-align: center; }
+.markdown figcaption { margin-top: 8px; color: #53665a; font-size: 13px; text-align: center; }
+.markdown table { width: 100%; margin: 24px 0; border-collapse: collapse; font-size: 14px; }
+.markdown th, .markdown td { border: 1px solid #9caf9e; padding: 10px 12px; text-align: left; vertical-align: top; }
+.markdown th { background: #e4eee5; color: #203d28; font-weight: 600; }
+.markdown tr:nth-child(even) td { background: #f4f8f4; }
+.markdown blockquote { margin: 22px 0; padding-left: 18px; border-left: 2px solid #5a8d67; color: #405a48; }
+.markdown code { color: #8b5419; }
+.markdown .katex-display { margin: 28px 0; overflow-x: auto; text-align: center; }
+.markdown .katex { color: #26352b; }

@@ -1,0 +1,30 @@
+---
+import { getCollection, render } from 'astro:content'
+import Layout from '../../layouts/Layout.astro'
+import { template } from '../../settings'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blogs')
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }))
+}
+
+const { post } = Astro.props
+const { Content } = await render(post)
+---
+<Layout title={`${post.data.title} · blogs`}>
+  <article class="post">
+    <a class="back" href={`${template.base}/blogs`}>← back to blogs</a>
+    <time>{post.data.date.toISOString().slice(0, 10)}</time>
+    <h1>{post.data.title}</h1>
+    <div class="markdown"><Content /></div>
+  </article>
+</Layout>
+
+<style>
+  .post { max-width: 900px; }
+  .back { display: inline-block; margin-bottom: 28px; color: #087eb5; font-size: 13px; text-decoration: none; }
+  .post > time { display: block; color: #3f7653; font-size: 12px; }
+  .post > h1 { margin: 10px 0 34px; color: #087eb5; font-size: clamp(25px, 4vw, 38px); line-height: 1.3; }
+  .back:hover { text-decoration: underline; }
+</style>
+

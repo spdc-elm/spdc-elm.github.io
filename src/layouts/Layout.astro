@@ -1,105 +1,60 @@
 ---
-import { ClientRouter } from 'astro:transitions';
-
-import BetterIcon from '../components/ui/BetterIcon.astro'
-import DarkLightController from '../components/ui/DarkLightController.astro'
-import ThemeSelector from '../components/ui/ThemeSelector.astro'
-import Navbar from '../components/ui/Navbar.astro'
 import Head from '../components/Head.astro'
-
+import 'katex/dist/katex.min.css'
+import '../styles/markdown.css'
 import { seo, profile, template } from '../settings'
-import Footer from '../components/ui/Footer.astro'
 
 type Props = {
-	title?: string
-	description?: string
-	image?: string
+  title?: string
+  description?: string
 }
-
-const {
-	title = seo.default_title,
-	description = seo.default_description,
-	image = seo.default_image,
-} = Astro.props
+const { title = seo.default_title, description = seo.default_description } = Astro.props
+const rawPath = Astro.url.pathname.replace(/\/$/, '') || '/'
+const currentPath = template.base && rawPath.startsWith(template.base) ? rawPath.slice(template.base.length) || '/' : rawPath
+const tabs = [
+  { label: 'home', href: `${template.base}/` },
+  { label: 'blogs', href: `${template.base}/blogs` },
+  { label: 'Public Projects & Research', href: `${template.base}/projects` },
+]
 ---
-
 <!doctype html>
-<html lang='en'>
-	<head>
-		{template.transitions && <ClientRouter /> }
-
-		<Head title={title} description={description} image={image} />
-
-
-
-	</head>
-	<body>
-		<div class={`bg-base-100 drawer lg:drawer-open ${template.menu_left ? 'drawer-end' : ''}`}>
-			<input id='my-drawer' type='checkbox' class='drawer-toggle' />
-			<!-- Drawer content -->
-            <div class='drawer-content bg-base-100'>
-				<div class='bg-base-100 z-50 text-base-content shadow-sm'>
-					<nav class='navbar'>
-						<div class='navbar-start'>
-							{template.menu_left &&
-								<DarkLightController/>
-								/* <ThemeSelector transition:persist /> */
-							}
-							<label for='my-drawer' class='btn btn-square btn-ghost lg:hidden'>
-								<BetterIcon>
-									<svg
-										xmlns='http://www.w3.org/2000/svg'
-										fill='none'
-										viewBox='0 0 24 24'
-										stroke-width='1.5'
-										class='size-6 stroke-current'
-									>
-										<path
-											stroke-linecap='round'
-											stroke-linejoin='round'
-											d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'></path>
-									</svg>
-								</BetterIcon>
-							</label>
-						</div>
-						<div class='navbar-center lg:hidden text-lg font-black'>
-							{profile.title}
-							{profile.fullName}
-						</div>
-						<div class='navbar-end'>
-							{!template.menu_left &&
-								<DarkLightController/>
-								/* <ThemeSelector transition:persist /> */
-							}
-						</div>
-					</nav>
-				</div>
-                <main class='p-8 pt-10 lg:pt-16 lg:max-w-5xl max-w-full mx-auto min-h-screen flex flex-col justify-between'>
-					<!-- Page content -->
-					<slot />
-				<Footer />
-				</main>
-			</div>
-			<!-- Drawer side -->
-			<div class='drawer-side z-40'>
-				<label for='my-drawer' aria-label='close sidebar' class='drawer-overlay'
-				></label>
-				<Navbar />
-			</div>
-		</div>
-	</body>
+<html lang="en">
+  <head>
+    <Head title={title} description={description} image={seo.default_image} />
+  </head>
+  <body>
+    <div class="terminal-shell">
+      <header class="window-bar">
+        <div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+        <span class="window-title">spdc-elm.github.io</span>
+      </header>
+      <nav class="tab-bar" aria-label="Primary navigation">
+        {tabs.map((tab, index) => {
+          const active = tab.href === `${template.base}${currentPath === '/' ? '/' : currentPath}` || (tab.label === 'home' && currentPath === '/')
+          return <a class:list={{ active }} href={tab.href}><span class="tab-index">{index + 1}</span>{tab.label}</a>
+        })}
+      </nav>
+      <main class="terminal-content">
+        <div class="prompt-line"><span class="prompt">➜</span><span>~/{currentPath === '/' ? '' : currentPath.slice(1)}</span></div>
+        <slot />
+      </main>
+    </div>
+  </body>
 </html>
 
-<style>
-	@media (prefers-color-scheme: dark) {
-		:root {
-			--my-color: #252b30;
-		}
-	}
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+<style is:global>
+  @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap');
+  :root { color-scheme: light; font-family: 'Fira Code', 'SFMono-Regular', Consolas, monospace; background: #eef3ee; color: #26352b; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-width: 320px; background: radial-gradient(circle at 50% -15%, #dcebdd 0, #eef3ee 48rem); }
+  a { color: inherit; }
+  .terminal-shell { width: min(1120px, calc(100% - 32px)); min-height: min(760px, calc(100vh - 48px)); margin: 24px auto; border: 1px solid #b8cdbb; border-radius: 6px; overflow: hidden; background: #fbfdfb; box-shadow: 0 18px 50px #99ad9a55, 0 0 0 1px #fff; }
+  .window-bar, .tab-bar { display: flex; align-items: center; height: 38px; padding: 0 16px; border-bottom: 1px solid #c7d8c9; font-size: 12px; color: #506957; }
+  .window-bar { justify-content: space-between; background: #e5eee6; color: #304c38; }
+  .window-title { margin-left: -18px; }
+  .window-status { display: none; }
+  .window-dots { display: flex; gap: 7px; } .window-dots i { display: block; width: 10px; height: 10px; border-radius: 50%; background: #8eaa94; } .window-dots i:first-child { background: #d38b62; }
+  .tab-bar { height: 42px; padding: 0 10px; gap: 2px; background: #f0f6f0; } .tab-bar a { padding: 12px 17px 10px; text-decoration: none; color: #617c67; border-bottom: 2px solid transparent; } .tab-bar a:hover, .tab-bar a.active { color: #203d28; background: #dcebdd; border-bottom-color: #4d9b5d; } .tab-index { margin-right: 8px; color: #75917a; }
+  .terminal-content { min-height: 590px; padding: 42px clamp(22px, 6vw, 78px) 64px; } .prompt-line { display: flex; gap: 10px; color: #66806b; font-size: 13px; margin-bottom: 38px; } .prompt { color: #398655; }
+  @media (max-width: 600px) { .terminal-shell { width: calc(100% - 16px); min-height: calc(100vh - 16px); margin: 8px auto; } .window-title { margin-left: 0; } .window-status { display: none; } .terminal-content { padding: 30px 18px 48px; } .tab-bar a { padding-inline: 10px; } }
 </style>

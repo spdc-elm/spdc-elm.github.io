@@ -1,37 +1,25 @@
 ---
+import { getCollection, render } from 'astro:content'
 import Layout from '../layouts/Layout.astro'
+import { profile, template } from '../settings'
 
-import { profile } from '@/settings'
-import { publications } from '@/data/cv'
-import ProfilePictures from '@/assets/profile_pictures.jpg'
-import Hero from '@/components/ui/Hero.astro'
-import Grid from '@/components/ui/Grid.astro'
-import ArticleList from '@/components/ui/ArticleList.astro'
-
-const { fullName, title, institute, research_areas } = profile
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const aboutEntries = await getCollection('about')
+const about = aboutEntries[0]
+const { Content } = about ? await render(about) : { Content: null }
 ---
-
-<Layout>
-	<!-- Hero Section -->
-	<section class='flex items-center gap-12 border-b pb-12'>
-		<Hero
-			fullName={fullName}
-			title={title}
-			institute={institute}
-			profilePicture={ProfilePictures}
-		/>
-	</section>
-
-	<!-- Research Areas -->
-	<section class='py-12 border-b'>
-		<Grid gridTitle='Research Areas' gridItems={research_areas} />
-	</section>
-
-	<!-- Recent Publications -->
-	<section class='py-12 border-t'>
-		<ArticleList listTitle='Recent Publications' listItems={publications} />
-	</section>
+<Layout title={`${profile.fullName || 'your-name'} · home`}>
+  <section class="home-panel">
+    <p class="command"><span class="prompt">spdc-elm@ZJU</span> <span class="muted">% cat about.md</span></p>
+    <div class="about-content markdown">
+      {Content ? <Content /> : <p class="placeholder">about.md is empty.</p>}
+    </div>
+    <p class="hint">Try <a href={`${template.base}/blogs`}>/blogs</a> or <a href={`${template.base}/projects`}>/projects</a> for more detailed information.</p>
+  </section>
 </Layout>
+
+<style>
+  .home-panel { max-width: 980px; }
+  .command { margin: 0 0 34px; font-size: 14px; } .prompt { color: #1976a8; } .muted { color: #8b5419; }
+  .about-content { border-bottom: 1px solid #728178; padding-bottom: 32px; color: #26352b; font-size: 15px; line-height: 1.8; } .about-content :global(h1), .about-content :global(h2), .about-content :global(h3) { color: #087eb5; } .about-content :global(h1) { margin: 0 0 24px; font-size: clamp(26px, 4vw, 36px); font-weight: 600; } .about-content :global(h2) { margin: 32px 0 14px; font-size: 1.65rem; } .about-content :global(h3) { margin: 24px 0 10px; font-size: 1.3rem; } .about-content :global(p) { margin: 0 0 14px; } .about-content :global(a) { color: #1976a8; } .placeholder { color: #4d6653; }
+  .hint { margin-top: 28px; color: #4d6653; font-size: 13px; } .hint a { color: #1976a8; text-decoration: none; } .hint a:hover { text-decoration: underline; }
+</style>
